@@ -2,13 +2,12 @@ package br.com.blog.service;
 
 import br.com.blog.dto.UserRequest;
 import br.com.blog.dto.UserResponse;
+import br.com.blog.exception.PasswordValidationExeption;
 import br.com.blog.model.User;
 import br.com.blog.repository.UserRepository;
 import br.com.blog.utils.UserConvert;
+import br.com.blog.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +21,14 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public UserResponse saveUser(UserRequest userDTO) throws Exception {
+        if(repository.findByEmail(userDTO.getEmail()) != null)
+            throw new IllegalArgumentException("User already exists");
+
         User user = UserConvert.toEntity(userDTO);
-        //TODO Validar senha
-        //if (!Validator.passwordValidate(userDTO.getPassword()))
-        //    throw new PasswordValidationExeption("Senha não preenche requisitos");
+
+        if (!Validator.passwordValidate(userDTO.getPassword()))
+            throw new PasswordValidationExeption("Invalid password");
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(true);
         User userEntity = repository.save(user);
@@ -34,6 +37,6 @@ public class UserService {
 
     public UserResponse getUserById(Long id){
         return UserConvert.toResponse(repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado")));
+                .orElseThrow(() -> new NoSuchElementException("User not found")));
     }
 }

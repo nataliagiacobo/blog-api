@@ -3,17 +3,20 @@ package br.com.blog.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 @Data
 public class UserRequest {
-    @NotBlank
-    @Length(min = 5)
+    @NotBlank(message = "Invalid Name: Empty name")
+    @NotNull(message = "Invalid Name: Name is NULL")
+    @Size(min = 3, max = 30, message = "Invalid Name: Must be of 3 - 30 characters")
     private String name;
-    @Email
+    @Email(message = "Invalid email")
+    @NotNull(message = "Invalid email: Empty e-mail")
+    @NotBlank(message = "Invalid email: E-mail is NULL")
     private String email;
-    @NotNull(message = "Username cannot be blank")
-    @NotBlank(message = "Username cannot be null")
+    @NotNull(message = "Invalid password: Empty password")
+    @NotBlank(message = "Invalid password: Password is NULL")
     private String password;
 }
