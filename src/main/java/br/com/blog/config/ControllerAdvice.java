@@ -4,6 +4,8 @@ import br.com.blog.exception.PasswordValidationExeption;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,6 +49,18 @@ public class ControllerAdvice {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PasswordValidationExeption.class)
     public ApiError handler(PasswordValidationExeption exception) {
+        return new ApiError(exception.getMessage(), new ArrayList<>());
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ApiError handler(UsernameNotFoundException exception) {
+        return new ApiError(exception.getMessage(), new ArrayList<>());
+    }
+
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ApiError handler(BadCredentialsException exception) {
         return new ApiError(exception.getMessage(), new ArrayList<>());
     }
 
