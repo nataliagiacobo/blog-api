@@ -21,7 +21,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public UserResponse saveUser(UserRequest userDTO) throws Exception {
-        if(repository.findByEmail(userDTO.getEmail()) != null)
+        if(repository.findByUsername(userDTO.getUsername()) != null)
             throw new IllegalArgumentException("User already exists");
 
         User user = UserConvert.toEntity(userDTO);

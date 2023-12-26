@@ -21,10 +21,10 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC512(secretKey);
             return JWT.create()
-                    .withSubject(user.getEmail())
+                    .withSubject(user.getUsername())
                     .withClaim("id", user.getId())
                     .withClaim("name", user.getName())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 3600000))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 86400000))
                     .withIssuer("Blog")
                     .sign(algorithm);
         }catch (JWTCreationException exception) {

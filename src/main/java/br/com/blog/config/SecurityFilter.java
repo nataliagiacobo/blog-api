@@ -42,7 +42,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private void authenticate(String subject){
-        UserDetails user = userRepository.findByEmail(subject);
+        UserDetails user = userRepository.findByUsername(subject);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null,user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
